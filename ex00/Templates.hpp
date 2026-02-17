@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Templates.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mpascoal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/17 00:49:24 by mpascoal          #+#    #+#             */
+/*   Updated: 2026/02/17 00:49:27 by mpascoal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TEMPLATES_HPP
 # define TEMPLATES_HPP
 
@@ -12,13 +24,17 @@ void swap(T& a, T& b)
 template <typename T>
 T min(T a, T b)
 {
-	return (a < b) ? a : b;
+	if (a < b)
+		return (a);
+	return (b);
 }
 
 template <typename T>
 T max(T a, T b)
 {
-	return (a > b) ? a : b;
+	if (a > b)
+		return (a);
+	return (b);
 }
 
 #endif

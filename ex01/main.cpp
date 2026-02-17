@@ -1,21 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mpascoal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/17 01:14:43 by mpascoal          #+#    #+#             */
+/*   Updated: 2026/02/17 01:14:46 by mpascoal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Iter.hpp"
 #include <iostream>
 #include <string>
 
-// Template function for printing (const - read-only)
+// ============================================================
+//                    HELPER FUNCTIONS
+// ============================================================
+
+// --- CONST FUNCTIONS (Read-only) ---
+
 template <typename T>
 void print(const T& elem)
 {
 	std::cout << elem << " ";
 }
 
-// Function to increment integers (non-const - modifies)
+void displayString(const std::string& str)
+{
+	std::cout << "\"" << str << "\" ";
+}
+
+template <typename T>
+void displayInfo(const T& elem)
+{
+	std::cout << "  → " << elem << std::endl;
+}
+
+// --- NON-CONST FUNCTIONS (Modify) ---
+
 void increment(int& n)
 {
 	n++;
 }
 
-// Function to make strings uppercase (non-const - modifies)
+void doubleValue(double& d)
+{
+	d *= 2.0;
+}
+
 void toUpperCase(std::string& str)
 {
 	for (size_t i = 0; i < str.length(); i++)
@@ -25,84 +58,179 @@ void toUpperCase(std::string& str)
 	}
 }
 
-// Function to display strings (const - read-only)
-void displayString(const std::string& str)
+// ============================================================
+//                    UTILITY FUNCTIONS
+// ============================================================
+
+void printSeparator()
 {
-	std::cout << "[" << str << "] ";
+	std::cout << "\n" << std::string(60, '=') << std::endl;
 }
 
-// Function to double values (non-const - modifies)
-void doubleValue(double& d)
+void printHeader(const std::string& title)
 {
-	d *= 2.0;
+	printSeparator();
+	std::cout << "  " << title << std::endl;
+	printSeparator();
 }
 
-// Template function to display with type info (const - read-only)
 template <typename T>
-void displayWithType(const T& elem)
+void printArray(const std::string& label, T* array, size_t size)
 {
-	std::cout << "Value: " << elem << std::endl;
+	std::cout << label;
+	iter(array, size, print<T>);
+	std::cout << std::endl;
 }
+
+// ============================================================
+//                         MAIN
+// ============================================================
 
 int main()
 {
-	std::cout << "=== Test 1: Array of integers (read-only) ===" << std::endl;
-	int intArray[] = {1, 2, 3, 4, 5};
-	std::cout << "Original: ";
-	iter(intArray, 5, print<int>);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 2: Array of integers (modify) ===" << std::endl;
-	std::cout << "Before increment: ";
-	iter(intArray, 5, print<int>);
-	std::cout << std::endl;
-	
-	iter(intArray, 5, increment);
-	
-	std::cout << "After increment:  ";
-	iter(intArray, 5, print<int>);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 3: Array of doubles ===" << std::endl;
-	double doubleArray[] = {1.1, 2.2, 3.3, 4.4, 5.5};
-	std::cout << "Original: ";
-	iter(doubleArray, 5, print<double>);
-	std::cout << std::endl;
-	
-	iter(doubleArray, 5, doubleValue);
-	
-	std::cout << "After doubling: ";
-	iter(doubleArray, 5, print<double>);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 4: Array of strings (read-only) ===" << std::endl;
-	std::string stringArray[] = {"hello", "world", "cpp", "templates"};
-	std::cout << "Original strings: ";
-	iter(stringArray, 4, displayString);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 5: Array of strings (modify) ===" << std::endl;
-	iter(stringArray, 4, toUpperCase);
-	std::cout << "After uppercase: ";
-	iter(stringArray, 4, displayString);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 6: Array of chars ===" << std::endl;
-	char charArray[] = {'a', 'b', 'c', 'd', 'e'};
-	std::cout << "Characters: ";
-	iter(charArray, 5, print<char>);
-	std::cout << std::endl;
-	
-	std::cout << "\n=== Test 7: Template function with different types ===" << std::endl;
-	std::cout << "Integers:" << std::endl;
-	int nums[] = {10, 20, 30};
-	iter(nums, 3, displayWithType<int>);
-	
-	std::cout << "Strings:" << std::endl;
-	std::string words[] = {"ONE", "TWO", "THREE"};
-	iter(words, 3, displayWithType<std::string>);
-	
-	std::cout << "\n=== All tests completed successfully! ===" << std::endl;
-	
+	std::cout << "\n";
+	std::cout << "╔══════════════════════════════════════════════════════════╗\n";
+	std::cout << "║         ITER TEMPLATE FUNCTION - COMPREHENSIVE TEST       ║\n";
+	std::cout << "╚══════════════════════════════════════════════════════════╝\n";
+
+	// ========== TEST 1: Int Array - Read Only ==========
+	printHeader("TEST 1: Integer Array (Read-Only)");
+	{
+		int arr[] = {10, 20, 30, 40, 50};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "📖 Using const function (print)\n";
+		printArray("   Array: ", arr, size);
+	}
+
+	// ========== TEST 2: Int Array - Modify ==========
+	printHeader("TEST 2: Integer Array (Modification)");
+	{
+		int arr[] = {1, 2, 3, 4, 5};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "🔧 Using non-const function (increment)\n";
+		printArray("   Before: ", arr, size);
+		
+		iter(arr, size, increment);
+		
+		printArray("   After:  ", arr, size);
+	}
+
+	// ========== TEST 3: Double Array - Read Only ==========
+	printHeader("TEST 3: Double Array (Read-Only)");
+	{
+		double arr[] = {3.14, 2.71, 1.41, 1.61, 0.57};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "📖 Using const function (print)\n";
+		printArray("   Array: ", arr, size);
+	}
+
+	// ========== TEST 4: Double Array - Modify ==========
+	printHeader("TEST 4: Double Array (Modification)");
+	{
+		double arr[] = {1.5, 2.5, 3.5};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "🔧 Using non-const function (doubleValue)\n";
+		printArray("   Before: ", arr, size);
+		
+		iter(arr, size, doubleValue);
+		
+		printArray("   After:  ", arr, size);
+	}
+
+	// ========== TEST 5: String Array - Read Only ==========
+	printHeader("TEST 5: String Array (Read-Only)");
+	{
+		std::string arr[] = {"hello", "world", "from", "cpp"};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "📖 Using const function (displayString)\n";
+		std::cout << "   Strings: ";
+		iter(arr, size, displayString);
+		std::cout << std::endl;
+	}
+
+	// ========== TEST 6: String Array - Modify ==========
+	printHeader("TEST 6: String Array (Modification)");
+	{
+		std::string arr[] = {"template", "function", "test"};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "🔧 Using non-const function (toUpperCase)\n";
+		std::cout << "   Before: ";
+		iter(arr, size, displayString);
+		std::cout << std::endl;
+		
+		iter(arr, size, toUpperCase);
+		
+		std::cout << "   After:  ";
+		iter(arr, size, displayString);
+		std::cout << std::endl;
+	}
+
+	// ========== SPECIAL TEST 1: Empty Array ==========
+	printHeader("SPECIAL TEST 1: Empty Array");
+	{
+		int arr[1];  // Array com tamanho 0 logicamente
+		
+		std::cout << "📋 Testing with length = 0\n";
+		std::cout << "   (Should print nothing)\n   → ";
+		iter(arr, 0, print<int>);
+		std::cout << "[OK - No output as expected]" << std::endl;
+	}
+
+	// ========== SPECIAL TEST 2: Single Element ==========
+	printHeader("SPECIAL TEST 2: Single Element Array");
+	{
+		int arr[] = {42};
+		size_t size = sizeof(arr) / sizeof(arr[0]);
+		
+		std::cout << "📋 Testing with single element\n";
+		printArray("   Array: ", arr, size);
+		
+		iter(arr, size, increment);
+		
+		printArray("   After:  ", arr, size);
+	}
+
+	// ========== SPECIAL TEST 3: NULL Pointer Protection ==========
+	printHeader("SPECIAL TEST 3: NULL Pointer (Safety Check)");
+	{
+		int* nullPtr = NULL;
+		
+		std::cout << "⚠️  Testing with NULL pointer\n";
+		std::cout << "   iter(NULL, 5, print) → ";
+		iter(nullPtr, 5, print<int>);
+		std::cout << "[OK - Protected against NULL]" << std::endl;
+	}
+
+	// ========== SPECIAL TEST 4: Template Function with Multiple Types ==========
+	printHeader("SPECIAL TEST 4: Template Function Versatility");
+	{
+		std::cout << "🔄 Using template function (displayInfo) with different types\n\n";
+		
+		std::cout << "   Integers:\n";
+		int intArr[] = {100, 200, 300};
+		iter(intArr, 3, displayInfo<int>);
+		
+		std::cout << "\n   Doubles:\n";
+		double doubleArr[] = {1.23, 4.56, 7.89};
+		iter(doubleArr, 3, displayInfo<double>);
+		
+		std::cout << "\n   Strings:\n";
+		std::string strArr[] = {"Alpha", "Beta", "Gamma"};
+		iter(strArr, 3, displayInfo<std::string>);
+	}
+
+	// ========== FINAL MESSAGE ==========
+	std::cout << "\n";
+	std::cout << "╔══════════════════════════════════════════════════════════╗\n";
+	std::cout << "║                  ✅ ALL TESTS PASSED! ✅                  ║\n";
+	std::cout << "╚══════════════════════════════════════════════════════════╝\n";
+	std::cout << "\n";
+
 	return 0;
 }

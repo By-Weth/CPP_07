@@ -1,90 +1,124 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Array.tpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mpascoal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/17 10:27:45 by mpascoal          #+#    #+#             */
+/*   Updated: 2026/02/17 10:27:48 by mpascoal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ARRAY_TPP
-#define ARRAY_TPP
+# define ARRAY_TPP
 
-#include "Array.hpp"
+# include "Array.hpp"
 
-// Construtor padrão - cria array vazio
+// ============================================================
+//                     CONSTRUCTORS
+// ============================================================
+
 template <typename T>
-Array<T>::Array() : _elements(NULL), _size(0) {
-    std::cout << "Array default constructor called" << std::endl;
+Array<T>::Array() : _elements(NULL), _size(0)
+{
+	std::cout << "Array: Default constructor called" << std::endl;
 }
 
-// Construtor com tamanho - cria array com n elementos inicializados por padrão
 template <typename T>
-Array<T>::Array(unsigned int n) : _elements(NULL), _size(n) {
-    std::cout << "Array parametric constructor called (size: " << n << ")" << std::endl;
-    if (n > 0) {
-        _elements = new T[n]();  // () inicializa com valores padrão
-    }
+Array<T>::Array(unsigned int n) : _elements(NULL), _size(n)
+{
+	std::cout << "Array: Parametric constructor called (size: " << n << ")" << std::endl;
+	
+	if (n > 0)
+		_elements = new T[n]();
 }
 
-// Construtor de cópia - deep copy
 template <typename T>
-Array<T>::Array(const Array& other) : _elements(NULL), _size(other._size) {
-    std::cout << "Array copy constructor called" << std::endl;
-    if (_size > 0) {
-        _elements = new T[_size];
-        for (unsigned int i = 0; i < _size; i++) {
-            _elements[i] = other._elements[i];
-        }
-    }
+Array<T>::Array(const Array& other) : _elements(NULL), _size(other._size)
+{
+	std::cout << "Array: Copy constructor called" << std::endl;
+	
+	if (_size > 0)
+	{
+		_elements = new T[_size];
+		for (unsigned int i = 0; i < _size; i++)
+			_elements[i] = other._elements[i];
+	}
 }
 
-// Operador de atribuição - deep copy
+// ============================================================
+//                       DESTRUCTOR
+// ============================================================
+
 template <typename T>
-Array<T>& Array<T>::operator=(const Array& other) {
-    std::cout << "Array assignment operator called" << std::endl;
-    if (this != &other) {
-        // Libera memória antiga
-        if (_elements != NULL) {
-            delete[] _elements;
-        }
-        
-        // Copia novo tamanho e aloca nova memória
-        _size = other._size;
-        if (_size > 0) {
-            _elements = new T[_size];
-            for (unsigned int i = 0; i < _size; i++) {
-                _elements[i] = other._elements[i];
-            }
-        } else {
-            _elements = NULL;
-        }
-    }
-    return *this;
+Array<T>::~Array()
+{
+	std::cout << "Array: Destructor called" << std::endl;
+	
+	if (_elements != NULL)
+		delete[] _elements;
 }
 
-// Destrutor
+// ============================================================
+//                   ASSIGNMENT OPERATOR
+// ============================================================
+
 template <typename T>
-Array<T>::~Array() {
-    std::cout << "Array destructor called" << std::endl;
-    if (_elements != NULL) {
-        delete[] _elements;
-    }
+Array<T>& Array<T>::operator=(const Array& other)
+{
+	std::cout << "Array: Assignment operator called" << std::endl;
+	
+	if (this != &other)
+	{
+		if (_elements != NULL)
+			delete[] _elements;
+		
+		_size = other._size;
+		
+		if (_size > 0)
+		{
+			_elements = new T[_size];
+			for (unsigned int i = 0; i < _size; i++)
+				_elements[i] = other._elements[i];
+		}
+		else
+		{
+			_elements = NULL;
+		}
+	}
+	
+	return *this;
 }
 
-// Operador de acesso [] - versão não-const
+// ============================================================
+//                   SUBSCRIPT OPERATORS
+// ============================================================
+
 template <typename T>
-T& Array<T>::operator[](unsigned int index) {
-    if (index >= _size) {
-        throw OutOfBoundsException();
-    }
-    return _elements[index];
+T& Array<T>::operator[](unsigned int index)
+{
+	if (index >= _size)
+		throw OutOfBoundsException();
+	return _elements[index];
 }
 
-// Operador de acesso [] - versão const
 template <typename T>
-const T& Array<T>::operator[](unsigned int index) const {
-    if (index >= _size) {
-        throw OutOfBoundsException();
-    }
-    return _elements[index];
+const T& Array<T>::operator[](unsigned int index) const
+{
+	if (index >= _size)
+		throw OutOfBoundsException();
+	return _elements[index];
 }
 
-// Retorna o tamanho do array
+// ============================================================
+//                    MEMBER FUNCTIONS
+// ============================================================
+
 template <typename T>
-unsigned int Array<T>::size() const {
-    return _size;
+unsigned int Array<T>::size() const
+{
+	return _size;
 }
 
 #endif
